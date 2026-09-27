@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create your account</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #E8EEE9;
+    --card: #FAFCFA;
+    --ink: #1B2624;
+    --muted: #55645F;
+    --line: #C3CFC7;
+    --field: #8FA097;
+    --accent: #0E5C55;
+    --accent-ink: #FFFFFF;
+    --error: #A32A1F;
+    --error-bg: #FBECEA;
+    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1rem/1.5 var(--font-body);
+    padding: 2rem 1rem 3rem;
+  }
+  main { max-width: 780px; margin: 0 auto; }
+  h1 {
+    font: 800 clamp(2rem, 5vw, 2.75rem)/1.05 var(--font-display);
+    letter-spacing: -0.02em;
+    margin: 0 0 .5rem;
+  }
+  .lead { color: var(--muted); margin: 0 0 1.75rem; max-width: 52ch; }
+
+  form {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  fieldset { border: 0; margin: 0 0 1.75rem; padding: 0 0 0 1rem; border-left: 4px solid var(--accent); min-width: 0; }
+  legend { font: 600 1.15rem/1.2 var(--font-display); padding: 0; margin-left: -1rem; padding-left: 1rem; float: left; width: 100%; margin-bottom: 1rem; }
+  fieldset > .grid { clear: both; }
+  .grid { display: grid; gap: 1rem; grid-template-columns: 1fr; }
+  @media (min-width: 700px) { .grid { grid-template-columns: 1fr 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: .35rem; min-width: 0; }
+  label { font-weight: 600; font-size: .95rem; }
+  input {
+    font: inherit;
+    color: var(--ink);
+    background: #fff;
+    border: 1.5px solid var(--field);
+    border-radius: 6px;
+    padding: .65rem .75rem;
+    width: 100%;
+  }
+  input:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 3px solid #2F9E92;
+    outline-offset: 2px;
+  }
+  input[aria-invalid="true"] { border-color: var(--error); background: var(--error-bg); }
+  .error { color: var(--error); font-size: .875rem; min-height: 0; margin: 0; }
+  .hint { color: var(--muted); font-size: .875rem; margin: 0; }
+
+  .show-pw { display: flex; align-items: center; gap: .5rem; margin-top: .75rem; font-size: .95rem; }
+  .show-pw input { width: auto; accent-color: var(--accent); }
+  .show-pw label { font-weight: 500; }
+
+  .form-error {
+    background: var(--error-bg); color: var(--error);
+    border: 1px solid #E4B3AD; border-radius: 6px;
+    padding: .7rem .9rem; margin-bottom: 1rem; font-size: .95rem;
+  }
+  .form-error[hidden] { display: none; }
+
+  .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+  button {
+    font: 600 1rem var(--font-body);
+    background: var(--accent); color: var(--accent-ink);
+    border: 0; border-radius: 6px;
+    padding: .8rem 1.6rem; cursor: pointer;
+  }
+  button:hover { background: #0A4B45; }
+  button:disabled { opacity: .6; cursor: progress; }
+  .alt { color: var(--muted); }
+  .alt a { color: var(--accent); font-weight: 600; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Create your account</h1>
+  <p class="lead">Fill in every field. After you register, you'll go to the login page and sign in with your Gmail ID and password.</p>
+
+  <form id="registerForm" novalidate>
+    <div id="formError" class="form-error" role="alert" hidden></div>
+
+    <fieldset>
+      <legend>About you</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-err">
+          <p class="error" id="name-err"></p>
+        </div>
+        <div class="field">
+          <label for="fatherName">Father's name</label>
+          <input id="fatherName" name="fatherName" type="text" autocomplete="off" required aria-describedby="fatherName-err">
+          <p class="error" id="fatherName-err"></p>
+        </div>
+        <div class="field">
+          <label for="location">Location</label>
+          <input id="location" name="location" type="text" autocomplete="address-level2" placeholder="City or town" required aria-describedby="location-err">
+          <p class="error" id="location-err"></p>
+        </div>
+        <div class="field">
+          <label for="profession">Profession or occupation</label>
+          <input id="profession" name="profession" type="text" list="professions" autocomplete="organization-title" placeholder="Software Engineer, Student..." required aria-describedby="profession-err">
+          <datalist id="professions">
+            <option value="Software Engineer"></option>
+            <option value="Developer"></option>
+            <option value="Student"></option>
+            <option value="Designer"></option>
+            <option value="Teacher"></option>
+            <option value="Doctor"></option>
+            <option value="Business Owner"></option>
+          </datalist>
+          <p class="error" id="profession-err"></p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Contact</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="phone">Phone number</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+91 98765 43210" required aria-describedby="phone-err">
+          <p class="error" id="phone-err"></p>
+        </div>
+        <div class="field" aria-hidden="true"></div>
+        <div class="field">
+          <label for="email">Gmail ID</label>
+          <input id="email" name="email" type="email" autocomplete="email" placeholder="name@gmail.com" required aria-describedby="email-err">
+          <p class="error" id="email-err"></p>
+        </div>
+        <div class="field">
+          <label for="confirmEmail">Confirm Gmail ID</label>
+          <input id="confirmEmail" name="confirmEmail" type="email" autocomplete="off" required aria-describedby="confirmEmail-err">
+          <p class="error" id="confirmEmail-err"></p>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Password</legend>
+      <div class="grid">
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="new-password" required aria-describedby="password-hint password-err">
+          <p class="hint" id="password-hint">At least 8 characters, with a letter and a number.</p>
+          <p class="error" id="password-err"></p>
+        </div>
+        <div class="field">
+          <label for="confirmPassword">Confirm password</label>
+          <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required aria-describedby="confirmPassword-err">
+          <p class="error" id="confirmPassword-err"></p>
+        </div>
+      </div>
+      <div class="show-pw">
+        <input type="checkbox" id="showPw">
+        <label for="showPw">Show passwords</label>
+      </div>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" id="submitBtn">Create account</button>
+      <span class="alt">Already registered? <a href="login.html">Log in</a></span>
+    </div>
+  </form>
+</main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  const rules = {
+    name:            (v) => v.trim().length >= 2 ? '' : 'Enter your full name.',
+    fatherName:      (v) => v.trim().length >= 2 ? '' : "Enter your father's name.",
+    location:        (v) => v.trim() ? '' : 'Enter your city or town.',
+    profession:      (v) => v.trim() ? '' : 'Enter your profession or occupation.',
+    phone:           (v) => /^\+?[0-9]{10,15}$/.test(v.replace(/[\s-]/g, '')) ? '' : 'Enter a valid phone number, 10 to 15 digits.',
+    email:           (v) => /^[a-z0-9._%+-]+@gmail\.com$/i.test(v.trim()) ? '' : 'Enter a Gmail address ending in @gmail.com.',
+    confirmEmail:    (v) => v.trim().toLowerCase() === $('email').value.trim().toLowerCase() && v.trim() ? '' : 'Gmail IDs do not match.',
+    password:        (v) => v.length >= 8 && /[A-Za-z]/.test(v) && /\d/.test(v) ? '' : 'Use at least 8 characters with a letter and a number.',
+    confirmPassword: (v) => v === $('password').value && v ? '' : 'Passwords do not match.'
+  };
+  const fields = Object.keys(rules);
+
+  function setError(id, msg) {
+    $(id + '-err').textContent = msg;
+    $(id).setAttribute('aria-invalid', msg ? 'true' : 'false');
+  }
+  function check(id) {
+    const msg = rules[id]($(id).value);
+    setError(id, msg);
+    return !msg;
+  }
+
+  fields.forEach((id) => {
+    $(id).addEventListener('blur', () => { if ($(id).value !== '') check(id); });
+    $(id).addEventListener('input', () => { if ($(id).getAttribute('aria-invalid') === 'true') check(id); });
+  });
+  // Re-check the confirm fields when the original changes.
+  $('email').addEventListener('input', () => { if ($('confirmEmail').value) check('confirmEmail'); });
+  $('password').addEventListener('input', () => { if ($('confirmPassword').value) check('confirmPassword'); });
+
+  $('showPw').addEventListener('change', (e) => {
+    const type = e.target.checked ? 'text' : 'password';
+    $('password').type = type;
+    $('confirmPassword').type = type;
+  });
+
+  $('registerForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('formError').hidden = true;
+
+    const results = fields.map((id) => [id, check(id)]);
+    const firstBad = results.find(([, ok]) => !ok);
+    if (firstBad) { $(firstBad[0]).focus(); return; }
+
+    const payload = {};
+    fields.forEach((id) => { payload[id] = $(id).value; });
+
+    const btn = $('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        window.location.href = 'login.html?registered=1&email=' + encodeURIComponent(payload.email.trim().toLowerCase());
+        return;
+      }
+      if (data.errors) {
+        Object.entries(data.errors).forEach(([id, msg]) => { if ($(id)) setError(id, msg); });
+        const bad = Object.keys(data.errors).find((id) => $(id));
+        if (bad) $(bad).focus();
+      } else {
+        $('formError').textContent = data.message || 'Could not create your account. Try again.';
+        $('formError').hidden = false;
+      }
+    } catch (err) {
+      $('formError').textContent = 'Could not reach the server. Check that it is running, then try again.';
+      $('formError').hidden = false;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create account';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Log in</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #E8EEE9;
+    --card: #FAFCFA;
+    --ink: #1B2624;
+    --muted: #55645F;
+    --line: #C3CFC7;
+    --field: #8FA097;
+    --accent: #0E5C55;
+    --accent-ink: #FFFFFF;
+    --error: #A32A1F;
+    --error-bg: #FBECEA;
+    --ok-bg: #E1F1EA;
+    --ok: #0B4F3A;
+    --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1rem/1.5 var(--font-body);
+    padding: 2rem 1rem 3rem;
+  }
+  main { max-width: 440px; margin: 4vh auto 0; }
+  h1 {
+    font: 800 clamp(2rem, 5vw, 2.75rem)/1.05 var(--font-display);
+    letter-spacing: -0.02em;
+    margin: 0 0 .5rem;
+  }
+  .lead { color: var(--muted); margin: 0 0 1.5rem; }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .field { display: flex; flex-direction: column; gap: .35rem; margin-bottom: 1rem; }
+  label { font-weight: 600; font-size: .95rem; }
+  input[type="email"], input[type="password"], input[type="text"] {
+    font: inherit; color: var(--ink); background: #fff;
+    border: 1.5px solid var(--field); border-radius: 6px;
+    padding: .65rem .75rem; width: 100%;
+  }
+  input:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 3px solid #2F9E92; outline-offset: 2px;
+  }
+  input[aria-invalid="true"] { border-color: var(--error); background: var(--error-bg); }
+  .error { color: var(--error); font-size: .875rem; margin: 0; }
+
+  .show-pw { display: flex; align-items: center; gap: .5rem; margin: -.25rem 0 1.25rem; font-size: .95rem; }
+  .show-pw input { accent-color: var(--accent); }
+  .show-pw label { font-weight: 500; }
+
+  .notice { border-radius: 6px; padding: .7rem .9rem; margin-bottom: 1rem; font-size: .95rem; }
+  .notice[hidden] { display: none; }
+  .notice.ok  { background: var(--ok-bg); color: var(--ok); border: 1px solid #A9D3C1; }
+  .notice.bad { background: var(--error-bg); color: var(--error); border: 1px solid #E4B3AD; }
+
+  button {
+    font: 600 1rem var(--font-body);
+    background: var(--accent); color: var(--accent-ink);
+    border: 0; border-radius: 6px; padding: .8rem 1.6rem; cursor: pointer; width: 100%;
+  }
+  button:hover { background: #0A4B45; }
+  button:disabled { opacity: .6; cursor: progress; }
+  button.secondary { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
+  button.secondary:hover { background: #E1F1EA; }
+
+  .alt { color: var(--muted); margin: 1.25rem 0 0; }
+  .alt a { color: var(--accent); font-weight: 600; }
+
+  dl { margin: 1rem 0 1.5rem; display: grid; grid-template-columns: max-content 1fr; gap: .4rem 1rem; }
+  dt { color: var(--muted); }
+  dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="title">Log in</h1>
+  <p class="lead" id="lead">Use the Gmail ID and password you registered with.</p>
+
+  <div class="panel">
+    <div id="regNotice" class="notice ok" role="status" hidden>Account created. Log in with your Gmail ID and password.</div>
+    <div id="formError" class="notice bad" role="alert" hidden></div>
+
+    <form id="loginForm" novalidate>
+      <div class="field">
+        <label for="email">Gmail ID</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="name@gmail.com" required aria-describedby="email-err">
+        <p class="error" id="email-err"></p>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required aria-describedby="password-err">
+        <p class="error" id="password-err"></p>
+      </div>
+      <div class="show-pw">
+        <input type="checkbox" id="showPw">
+        <label for="showPw">Show password</label>
+      </div>
+      <button type="submit" id="submitBtn">Log in</button>
+      <p class="alt">New here? <a href="register.html">Create an account</a></p>
+    </form>
+
+    <div id="welcome" hidden>
+      <dl>
+        <dt>Name</dt><dd id="wName"></dd>
+        <dt>Gmail ID</dt><dd id="wEmail"></dd>
+        <dt>Location</dt><dd id="wLocation"></dd>
+        <dt>Profession</dt><dd id="wProfession"></dd>
+      </dl>
+      <button type="button" class="secondary" id="logoutBtn">Log out</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(window.location.search);
+
+  if (params.get('registered') === '1') {
+    $('regNotice').hidden = false;
+    const e = params.get('email');
+    if (e) { $('email').value = e; $('password').focus(); }
+    else { $('email').focus(); }
+  }
+
+  $('showPw').addEventListener('change', (e) => {
+    $('password').type = e.target.checked ? 'text' : 'password';
+  });
+
+  function setError(id, msg) {
+    $(id + '-err').textContent = msg;
+    $(id).setAttribute('aria-invalid', msg ? 'true' : 'false');
+    return !msg;
+  }
+
+  $('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    $('formError').hidden = true;
+    $('regNotice').hidden = true;
+
+    const email = $('email').value.trim();
+    const password = $('password').value;
+
+    const emailOk = setError('email', /^[a-z0-9._%+-]+@gmail\.com$/i.test(email) ? '' : 'Enter your Gmail ID, ending in @gmail.com.');
+    const pwOk = setError('password', password ? '' : 'Enter your password.');
+    if (!emailOk) { $('email').focus(); return; }
+    if (!pwOk) { $('password').focus(); return; }
+
+    const btn = $('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Logging in...';
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('sb_auth', JSON.stringify({ token: data.token, user: data.user }));
+        const returnTo = params.get('returnTo');
+        if (returnTo) {
+          window.location.href = returnTo;
+          return;
+        }
+        $('wName').textContent = data.user.name;
+        $('wEmail').textContent = data.user.email;
+        $('wLocation').textContent = data.user.location;
+        $('wProfession').textContent = data.user.profession;
+        $('title').textContent = 'Welcome, ' + data.user.name.split(' ')[0];
+        $('lead').textContent = 'You are logged in.';
+        $('loginForm').hidden = true;
+        $('welcome').hidden = false;
+        $('logoutBtn').focus();
+      } else {
+        $('formError').textContent = data.message || 'Could not log in. Try again.';
+        $('formError').hidden = false;
+        $('password').value = '';
+        $('password').focus();
+      }
+    } catch (err) {
+      $('formError').textContent = 'Could not reach the server. Check that it is running, then try again.';
+      $('formError').hidden = false;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Log in';
+    }
+  });
+
+  $('logoutBtn').addEventListener('click', () => { window.location.href = 'login.html'; });
+</script>
+</body>
+</html>
